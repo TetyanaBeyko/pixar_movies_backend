@@ -1,22 +1,32 @@
 import express, { Request, Response } from "express";
 import { getDatabase } from "./db";
+import { Up, Down } from "./db/migrations/9.02.24";
 import {
-  createTable,
-  dropTable,
-  insertData,
   selectData,
   orderData,
+  limitOrder,
+  conditionSelect,
   alterTable,
+  groupBy
 } from "./db/utility";
-import { Down, Up } from "./db/migrations/9.02.24";
 
 const app = express();
 const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const testTable = "Test";
+const boxOffice = "Boxoffice";
+const boxOfficeData = [
+  { rating: 8.2, domesticSales: 3808, internationalSales: 43261 },
+  { rating: 7.4, domesticSales: 2684, internationalSales: 92764 },
+  { rating: 6.0, domesticSales: 2064, internationalSales: 45654 },
+];
+
 const moviesTable = "Movies";
+
+const columnToSelect = "Director";
+const removingDuplicates = false;
+const sortingDirection = false;
 
 const callback = (error: Error, rows: Array<Object>) => {
   if (error) {
@@ -26,17 +36,25 @@ const callback = (error: Error, rows: Array<Object>) => {
   console.debug(rows);
 };
 
-Up(db, moviesTable);
+// Up(db, moviesTable);
+// Down(db,moviesTable);
 
-// selectData(db, moviesTable, callback);
-// orderData(db, moviesTable, callback);
+// selectData(db, moviesTable, columnToSelect, removingDuplicates, callback);
+
+// orderData(db, moviesTable, columnToSelect, sortingDirection, callback);
+
+// limitOrder(db, moviesTable, columnToSelect, callback);
+
+// conditionSelect(db, moviesTable, columnToSelect, callback);
+
 // alterTable(db, moviesTable);
 
-// dropTable(db, moviesTable);
+groupBy(db, moviesTable, columnToSelect, callback);
+
 db.close();
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Ktulhu Ftagn");
+  res.send("Слава Україні");
 });
 
 // app.listen(port, () => {

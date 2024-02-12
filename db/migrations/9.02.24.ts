@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { createTable, dropTable, insertData } from "../utility";
+import { createMovies, dropTable, insertMovie } from "../utility";
 
 export function Up(db: Database, tableName: string) {
   const testData = [
@@ -31,15 +31,9 @@ export function Up(db: Database, tableName: string) {
     },
   ];
 
-  // if (db) {
-  //   insertData(db, tableName, testData);
-  // } else {
-  //   createTable(db, tableName);
-  // }
-
   db.serialize(() => {
-    createTable(db, tableName);
-    insertData(db, tableName, testData);
+    createMovies(db, tableName);
+    insertMovie(db, tableName, testData);
   });
 }
 
