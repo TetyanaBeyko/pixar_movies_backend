@@ -8,25 +8,15 @@ import {
   orderData,
   alterTable,
 } from "./db/utility";
+import { Down, Up } from "./db/migrations/9.02.24";
 
 const app = express();
 const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const tableName = "testTable";
-
-const testData = [
-  [1, "Toy Story", "John Lasseter", 1995],
-  [2, "A Bug's Life", "John Lasseter", 1998],
-  [3, "Toy Story 2", "John Lasseter", 1999],
-  [4, "Monsters, Inc.", "Pete Docter", 2001],
-  [5, "Finding Nemo", "Andrew Stanton", 2003],
-  [6, "The Incredibles", "Brad Bird", 2004],
-];
-
-// createTable({db, tableName});
-// insertData({db, tableName, testData});
+const testTable = "Test";
+const moviesTable = "Movies";
 
 const callback = (error: Error, rows: Array<Object>) => {
   if (error) {
@@ -34,14 +24,16 @@ const callback = (error: Error, rows: Array<Object>) => {
     return;
   }
   console.debug(rows);
-}
+};
 
-selectData({db, tableName, callback});
-// orderData({db, tableName});
-// alterTable({db, tableName});
+Up(db, moviesTable);
 
-// dropTable({db, tableName});
-// db.close();
+// selectData(db, moviesTable, callback);
+// orderData(db, moviesTable, callback);
+// alterTable(db, moviesTable);
+
+// dropTable(db, moviesTable);
+db.close();
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Ktulhu Ftagn");

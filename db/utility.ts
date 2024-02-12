@@ -1,45 +1,44 @@
 import { Database } from "sqlite3";
 
-interface DatabaseProps {
-  db: Database;
-  tableName: string;
-}
-
-interface TestData extends DatabaseProps {
-  testData: (string | number)[][];
-}
-
-interface SelectAllProps extends DatabaseProps{
-  callback: CallableFunction;
-}
-
-export function createTable({ db, tableName }: DatabaseProps) {
+export function createTable(db: Database, tableName: string) {
   db.run(
-    `CREATE TABLE IF NOT EXISTS ${tableName} (id INTEGER, Title TEXT, Director TEXT, Year INTEGER)`
+    `CREATE TABLE IF NOT EXISTS ${tableName} (id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Director TEXT, Year INTEGER)`
   );
 }
 
-export function dropTable({ db, tableName }: DatabaseProps) {
+export function dropTable(db: Database, tableName: string) {
   db.run(`DROP TABLE IF EXISTS ${tableName}`);
 }
 
-export function insertData({ db, tableName, testData }: TestData) {
-  testData.map((array) =>
+export function insertData(
+  db: Database,
+  tableName: string,
+  testData: { title: string; director: string; year: number }[]
+) {
+  testData.map((obj) =>
     db.run(
-      `INSERT INTO ${tableName} (id, Title, Director, Year) VALUES (?, ?, ?, ?)`,
-      [array[0], array[1], array[2], array[3]]
+      `INSERT INTO ${tableName} (Title, Director, Year) VALUES (?, ?, ?)`,
+      [obj.title, obj.director, obj.year]
     )
   );
 }
 
-export function selectData({ db, tableName, callback }: SelectAllProps) {
+export function selectData(
+  db: Database,
+  tableName: string,
+  callback: CallableFunction
+) {
   db.all(`SELECT director FROM ${tableName}`, callback);
 }
 
-export function orderData({ db, tableName }: DatabaseProps) {
-  db.run(`SELECT * FROM ${tableName} ORDER BY Year ASC`);
+export function orderData(
+  db: Database,
+  tableName: string,
+  callback: CallableFunction
+) {
+  db.all(`SELECT * FROM ${tableName} ORDER BY Year DESC`, callback);
 }
 
-export function alterTable({ db, tableName }: DatabaseProps) {
+export function alterTable(db: Database, tableName: string) {
   db.run(`ALTER TABLE ${tableName} DROP Director`);
 }
