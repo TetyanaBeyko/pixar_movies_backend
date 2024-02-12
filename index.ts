@@ -7,7 +7,9 @@ import {
   limitOrder,
   conditionSelect,
   alterTable,
-  groupBy
+  groupBy,
+  createBoxoffice,
+  insertBoxoffice,
 } from "./db/utility";
 
 const app = express();
@@ -15,11 +17,38 @@ const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const boxOffice = "Boxoffice";
-const boxOfficeData = [
-  { rating: 8.2, domesticSales: 3808, internationalSales: 43261 },
-  { rating: 7.4, domesticSales: 2684, internationalSales: 92764 },
-  { rating: 6.0, domesticSales: 2064, internationalSales: 45654 },
+const boxofficeTable = "Boxoffice";
+const boxofficeData = [
+  {
+    movieID: 1,
+    rating: 8.3,
+    domesticSales: 191796233,
+    internationalSales: 170162503,
+  },
+  {
+    movieID: 2,
+    rating: 7.2,
+    domesticSales: 162798565,
+    internationalSales: 200600000,
+  },
+  {
+    movieID: 3,
+    rating: 7.9,
+    domesticSales: 245852179,
+    internationalSales: 239163000,
+  },
+  {
+    movieID: 4,
+    rating: 8.1,
+    domesticSales: 289916256,
+    internationalSales: 272900000,
+  },
+  {
+    movieID: 5,
+    rating: 8.2,
+    domesticSales: 380843261,
+    internationalSales: 555900000,
+  },
 ];
 
 const moviesTable = "Movies";
@@ -39,6 +68,10 @@ const callback = (error: Error, rows: Array<Object>) => {
 // Up(db, moviesTable);
 // Down(db,moviesTable);
 
+// createBoxoffice(db, boxofficeTable);
+
+// insertBoxoffice(db, boxofficeTable, boxofficeData);
+
 // selectData(db, moviesTable, columnToSelect, removingDuplicates, callback);
 
 // orderData(db, moviesTable, columnToSelect, sortingDirection, callback);
@@ -49,7 +82,7 @@ const callback = (error: Error, rows: Array<Object>) => {
 
 // alterTable(db, moviesTable);
 
-groupBy(db, moviesTable, columnToSelect, callback);
+// groupBy(db, moviesTable, columnToSelect, callback);
 
 db.close();
 
