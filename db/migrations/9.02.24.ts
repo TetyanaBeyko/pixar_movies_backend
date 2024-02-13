@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { createMovies, dropTable, insertMovie } from "../utility";
+import { createMovies, dropTable, insertMovie } from "../utility/utility";
 
 export function Up(db: Database, tableName: string) {
   const testData = [

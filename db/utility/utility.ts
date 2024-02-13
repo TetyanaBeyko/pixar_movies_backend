@@ -1,21 +1,8 @@
 import { Database } from "sqlite3";
 
 export function createTable(db: Database, tableName: string, model: string) {
-
   db.run(
     `CREATE TABLE IF NOT EXISTS ${tableName} ${model}`
-  );
-}
-
-export function createMovies(db: Database, tableName: string) {
-  db.run(
-    `CREATE TABLE IF NOT EXISTS ${tableName} (id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Director TEXT, Year INTEGER)`
-  );
-}
-
-export function createBoxoffice(db: Database, tableName: string) {
-  db.run(
-    `CREATE TABLE IF NOT EXISTS ${tableName} (MovieID INTEGER PRIMARY KEY, Rating INTEGER, Domestic_sales INTEGER, International_sales INTEGER)`
   );
 }
 

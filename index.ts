@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
-import { getDatabase } from "./db";
+import { getDatabase } from "./db/createDB";
 import { Up, Down } from "./db/migrations/9.02.24";
+import { callback } from "./db/callback/callback";
+import { Movies, Boxoffice } from "./models/table_discription/table_discription";
 import {
   selectData,
   orderData,
@@ -8,16 +10,16 @@ import {
   conditionSelect,
   alterTable,
   groupBy,
-  createBoxoffice,
+  // createBoxoffice,
   insertBoxoffice,
-} from "./db/utility";
+  createTable
+} from "./db/utility/utility";
 
 const app = express();
 const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const boxofficeTable = "Boxoffice";
 const boxofficeData = [
   {
     movieID: 1,
@@ -51,38 +53,41 @@ const boxofficeData = [
   },
 ];
 
-const moviesTable = "Movies";
+const tableName = {
+  movies: "Movies",
+  boxoffice: "Boxoffice",
+};
 
 const columnToSelect = "Director";
 const removingDuplicates = false;
 const sortingDirection = false;
 
-const callback = (error: Error, rows: Array<Object>) => {
-  if (error) {
-    console.error(error);
-    return;
-  }
-  console.debug(rows);
-};
 
-// Up(db, moviesTable);
-// Down(db,moviesTable);
+const moviesDescription = new Movies().createSpecification();
+const boxofficeDescription = new Boxoffice().createSpecification();
 
-// createBoxoffice(db, boxofficeTable);
+createTable(db, tableName.movies, moviesDescription);
+createTable(db, tableName.boxoffice, boxofficeDescription);
 
-// insertBoxoffice(db, boxofficeTable, boxofficeData);
 
-// selectData(db, moviesTable, columnToSelect, removingDuplicates, callback);
+// Up(db, tableName.movies);
+// Down(db, tableName.boxoffice);
 
-// orderData(db, moviesTable, columnToSelect, sortingDirection, callback);
+// createBoxoffice(db, tableName.boxoffice);
 
-// limitOrder(db, moviesTable, columnToSelect, callback);
+// insertBoxoffice(db, tableName.boxoffice, boxofficeData);
 
-// conditionSelect(db, moviesTable, columnToSelect, callback);
+// selectData(db, tableName.movies, columnToSelect, removingDuplicates, callback);
 
-// alterTable(db, moviesTable);
+// orderData(db, tableName.movies, columnToSelect, sortingDirection, callback);
 
-// groupBy(db, moviesTable, columnToSelect, callback);
+// limitOrder(db, tableName.movies, columnToSelect, callback);
+
+// conditionSelect(db, tableName.movies, columnToSelect, callback);
+
+// alterTable(db, tableName.movies);
+
+// groupBy(db, tableName.movies, columnToSelect, callback);
 
 db.close();
 
