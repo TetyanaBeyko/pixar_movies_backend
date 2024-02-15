@@ -1,8 +1,20 @@
 import express, { Request, Response } from "express";
 import { getDatabase } from "./db/createDB";
-import { Up, Down } from "./db/migrations/9.02.24";
 import { callback } from "./db/callback/callback";
-import { Movies, Boxoffice } from "./models/table_discription/table_discription";
+
+import {
+  Up_09_02_24,
+  Down_09_02_24,
+} from "./db/migrations/09.02.24_create_Movies_with_data";
+import {
+  Up_13_02_24,
+  Down_13_02_24,
+} from "./db/migrations/13.02.24_create_Boxoffice_with_data";
+import {
+  Movies,
+  Boxoffice,
+} from "./models/table_discription/table_discription";
+
 import {
   selectData,
   orderData,
@@ -10,9 +22,6 @@ import {
   conditionSelect,
   alterTable,
   groupBy,
-  // createBoxoffice,
-  insertBoxoffice,
-  createTable
 } from "./db/utility/utility";
 
 const app = express();
@@ -20,60 +29,12 @@ const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const boxofficeData = [
-  {
-    movieID: 1,
-    rating: 8.3,
-    domesticSales: 191796233,
-    internationalSales: 170162503,
-  },
-  {
-    movieID: 2,
-    rating: 7.2,
-    domesticSales: 162798565,
-    internationalSales: 200600000,
-  },
-  {
-    movieID: 3,
-    rating: 7.9,
-    domesticSales: 245852179,
-    internationalSales: 239163000,
-  },
-  {
-    movieID: 4,
-    rating: 8.1,
-    domesticSales: 289916256,
-    internationalSales: 272900000,
-  },
-  {
-    movieID: 5,
-    rating: 8.2,
-    domesticSales: 380843261,
-    internationalSales: 555900000,
-  },
-];
-
-const tableName = {
-  movies: "Movies",
-  boxoffice: "Boxoffice",
-};
-
 const columnToSelect = "Director";
 const removingDuplicates = false;
 const sortingDirection = false;
 
-
-const moviesDescription = new Movies().createSpecification();
-const boxofficeDescription = new Boxoffice().createSpecification();
-
-createTable(db, tableName.movies, moviesDescription);
-createTable(db, tableName.boxoffice, boxofficeDescription);
-
-
-// Up(db, tableName.movies);
-// Down(db, tableName.boxoffice);
-
-// createBoxoffice(db, tableName.boxoffice);
+// Up_09_02_24(db);
+// Down_09_02_24(db);
 
 // insertBoxoffice(db, tableName.boxoffice, boxofficeData);
 

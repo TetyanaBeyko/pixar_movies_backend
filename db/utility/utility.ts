@@ -1,46 +1,27 @@
 import { Database } from "sqlite3";
 
+// Create, Inset, Drop table //
 export function createTable(db: Database, tableName: string, model: string) {
-  db.run(
-    `CREATE TABLE IF NOT EXISTS ${tableName} ${model}`
-  );
+  db.run(`CREATE TABLE IF NOT EXISTS ${tableName} ${model}`);
 }
 
-export function insertMovie(
+export function insertTable(
   db: Database,
   tableName: string,
-  data: { title: string; director: string; year: number }[]
+  model: string,
+  createArrayValues: Function,
+  data: Array<Object>
 ) {
-  data.map((obj) =>
-    db.run(
-      `INSERT INTO ${tableName} (Title, Director, Year) VALUES (?, ?, ?)`,
-      [obj.title, obj.director, obj.year]
-    )
-  );
-}
-
-export function insertBoxoffice(
-  db: Database,
-  tableName: string,
-  data: {
-    movieID: number;
-    rating: number;
-    domesticSales: number;
-    internationalSales: number;
-  }[]
-) {
-  data.map((obj) =>
-    db.run(
-      `INSERT INTO ${tableName} (MovieID, Rating, Domestic_sales, International_sales) VALUES (?, ?, ?, ?)`,
-      [obj.movieID, obj.rating, obj.domesticSales, obj.internationalSales]
-    )
-  );
+  data.map((obj) => {
+    db.run(`INSERT INTO ${tableName} ${model}`, createArrayValues(obj));
+  });
 }
 
 export function dropTable(db: Database, tableName: string) {
   db.run(`DROP TABLE IF EXISTS ${tableName}`);
 }
 
+// Database Queries //
 export function selectData(
   db: Database,
   tableName: string,
