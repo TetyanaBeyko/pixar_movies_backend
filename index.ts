@@ -22,7 +22,9 @@ import {
   conditionSelect,
   alterTable,
   groupBy,
-  innerJoin
+  innerJoin,
+  leftJoin,
+  ratingPercent
 } from "./db/utility/utility";
 
 const app = express();
@@ -30,10 +32,11 @@ const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const movies = new Movies();
-const boxoffice = new Boxoffice();
+const movies = new Movies().tableName;
+const boxoffice = new Boxoffice().tableName;
 
-const columnToSelect = "Title, Domestic_sales, International_sales";
+// const columnToSelect = "Title, Domestic_sales, International_sales";
+const columnToSelect = "Title, Rating";
 const removingDuplicates = false;
 const sortingDirection = false;
 
@@ -41,6 +44,8 @@ const sortingDirection = false;
 
 // Up_09_02_24(db);
 // Down_09_02_24(db);
+// Up_13_02_24(db);
+// Down_13_02_24(db);
 
 // selectData(db, tableName, columnToSelect, removingDuplicates, callback);
 
@@ -54,7 +59,11 @@ const sortingDirection = false;
 
 // groupBy(db, tableName, columnToSelect, callback);
 
-innerJoin(db, movies, boxoffice, columnToSelect);
+// innerJoin(db, movies, boxoffice, columnToSelect, callback);
+
+// leftJoin(db, movies, boxoffice, columnToSelect, callback);
+
+ratingPercent(db, movies, boxoffice, columnToSelect, callback);
 
 db.close();
 

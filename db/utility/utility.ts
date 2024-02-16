@@ -88,13 +88,49 @@ export function alterTable(db: Database, tableName: string) {
 
 export function innerJoin(
   db: Database,
-  tableName_1: Object,
-  tableName_2: Object,
-  columnToSelect: string
+  tableName_1: string,
+  tableName_2: string,
+  columnToSelect: string,
+  callback: CallableFunction
 ) {
-  db.all(`SELECT ${columnToSelect}
+  db.all(
+    `SELECT ${columnToSelect}
     FROM ${tableName_1}
       JOIN ${tableName_2}
         ON ${tableName_1}.id = ${tableName_2}.MovieID
-    WHERE international_sales > domestic_sales;`);
+    WHERE international_sales > domestic_sales;`,
+    callback
+  );
+}
+
+export function leftJoin(
+  db: Database,
+  tableName_1: string,
+  tableName_2: string,
+  columnToSelect: string,
+  callback: CallableFunction
+) {
+  db.all(
+    `SELECT ${columnToSelect}
+  FROM ${tableName_1}
+    LEFT JOIN ${tableName_2}
+      ON ${tableName_1}.id = ${tableName_2}.MovieID;`,
+    callback
+  );
+}
+
+export function ratingPercent(
+  db: Database,
+  tableName_1: string,
+  tableName_2: string,
+  columnToSelect: string,
+  callback: CallableFunction
+) {
+  db.all(
+    `SELECT ${columnToSelect} * 10 AS rating_percent
+  FROM ${tableName_1}
+    LEFT JOIN ${tableName_2}
+      ON ${tableName_1}.id = ${tableName_2}.MovieID;`,
+    callback
+  );
 }
