@@ -22,6 +22,7 @@ import {
   conditionSelect,
   alterTable,
   groupBy,
+  innerJoin
 } from "./db/utility/utility";
 
 const app = express();
@@ -29,26 +30,31 @@ const port = 3000;
 
 const db = getDatabase("./db/test.db");
 
-const columnToSelect = "Director";
+const movies = new Movies();
+const boxoffice = new Boxoffice();
+
+const columnToSelect = "Title, Domestic_sales, International_sales";
 const removingDuplicates = false;
 const sortingDirection = false;
+
+
 
 // Up_09_02_24(db);
 // Down_09_02_24(db);
 
-// insertBoxoffice(db, tableName.boxoffice, boxofficeData);
+// selectData(db, tableName, columnToSelect, removingDuplicates, callback);
 
-// selectData(db, tableName.movies, columnToSelect, removingDuplicates, callback);
+// orderData(db, tableName, columnToSelect, sortingDirection, callback);
 
-// orderData(db, tableName.movies, columnToSelect, sortingDirection, callback);
+// limitOrder(db, tableName, columnToSelect, callback);
 
-// limitOrder(db, tableName.movies, columnToSelect, callback);
+// conditionSelect(db, tableName, columnToSelect, callback);
 
-// conditionSelect(db, tableName.movies, columnToSelect, callback);
+// alterTable(db, tableName);
 
-// alterTable(db, tableName.movies);
+// groupBy(db, tableName, columnToSelect, callback);
 
-// groupBy(db, tableName.movies, columnToSelect, callback);
+innerJoin(db, movies, boxoffice, columnToSelect);
 
 db.close();
 

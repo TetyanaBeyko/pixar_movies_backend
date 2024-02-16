@@ -22,11 +22,6 @@ class Model {
 
     return query;
   }
-
-  createArrayValues(valuesObj: Object) {
-    const array = Object.values(valuesObj);
-    return array;
-  }
 }
 
 export class Movies_Insert extends Model {

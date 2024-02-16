@@ -46,7 +46,6 @@ export function Up_13_02_24(db: Database) {
       db,
       description.tableName,
       insert.createSpecification(),
-      insert.createArrayValues,
       data
     );
   });

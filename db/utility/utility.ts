@@ -9,11 +9,10 @@ export function insertTable(
   db: Database,
   tableName: string,
   model: string,
-  createArrayValues: Function,
   data: Array<Object>
 ) {
   data.map((obj) => {
-    db.run(`INSERT INTO ${tableName} ${model}`, createArrayValues(obj));
+    db.run(`INSERT INTO ${tableName} ${model}`, Object.values(obj));
   });
 }
 
@@ -85,4 +84,17 @@ export function groupBy(
 
 export function alterTable(db: Database, tableName: string) {
   db.run(`ALTER TABLE ${tableName} DROP Director`);
+}
+
+export function innerJoin(
+  db: Database,
+  tableName_1: Object,
+  tableName_2: Object,
+  columnToSelect: string
+) {
+  db.all(`SELECT ${columnToSelect}
+    FROM ${tableName_1}
+      JOIN ${tableName_2}
+        ON ${tableName_1}.id = ${tableName_2}.MovieID
+    WHERE international_sales > domestic_sales;`);
 }
