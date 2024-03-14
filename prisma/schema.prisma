@@ -11,9 +11,18 @@ datasource db {
 }
 
 model Movies {
-  id  Int @id @default(autoincrement())
-  Title String  
-  Director String
-  Year Int
+  id             Int    @id @default(autoincrement())
+  Title          String
+  Director       String
+  Year           Int
   Length_minutes Int?
 }
+
+model Boxoffice {
+  Movie_id            Int @id @default(autoincrement())
+  Rating              Float
+  Domestic_sales      Int
+  International_sales Int
+}
+
+
