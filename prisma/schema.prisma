@@ -19,10 +19,8 @@ model Movies {
 }
 
 model Boxoffice {
-  Movie_id            Int @id @default(autoincrement())
+  Movie_id            Int   @id
   Rating              Float
   Domestic_sales      Int
   International_sales Int
 }
-
-
