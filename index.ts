@@ -24,10 +24,6 @@ const swaggerSpecification = swaggerJSDoc(options);
 
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpecification));
 
-interface Query {
-  limit: string | undefined
-  offset: string | undefined
-}
 
 /**
  * @openapi
@@ -102,11 +98,9 @@ app.get("/", (req: Request, res: Response) => {
  *         description: Returns error object.
  */
 app.get("/movies", (req: Request, res: Response) => {
-  console.log(req.query, req.params);
   let {limit, offset} = req.query;
   let take = limit ? Number(limit) : undefined;
   let skip = offset ? Number(offset) : undefined;
-  console.log(limit, offset);
   prisma.movies
     .findMany({take: take, skip: skip})
     .then((movies) => res.status(200).send(movies))
@@ -202,6 +196,17 @@ app.post("/movie", (req: Request, res: Response) => {
       data: movie,
     })
     .then((movie) => res.status(200).send(movie))
+    .catch((error) => res.status(500).send(error));
+});
+
+app.post("/boxoffice", (req: Request, res: Response) => {
+  const movieBoxoffice = req.body;
+  console.debug(movieBoxoffice);
+  prisma.boxoffice
+    .create({
+      data: movieBoxoffice,
+    })
+    .then((movieBoxoffice) => res.status(200).send(movieBoxoffice))
     .catch((error) => res.status(500).send(error));
 });
 
