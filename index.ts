@@ -201,8 +201,7 @@ app.post("/movie", (req: Request, res: Response) => {
 
 app.post("/boxoffice", (req: Request, res: Response) => {
   const movieBoxoffice = req.body;
-  console.debug(movieBoxoffice);
-  prisma.boxoffice
+   prisma.boxoffice
     .create({
       data: movieBoxoffice,
     })
