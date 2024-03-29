@@ -3,9 +3,16 @@ import { PrismaClient } from "@prisma/client";
 import bodyParser from "body-parser";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import cors from "cors";
+import path from "path";
+import fs from "fs";
+// import id1.jpg from "./assets/posters"
 
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
+
 const port = 3000;
 const prisma = new PrismaClient();
 
@@ -20,10 +27,25 @@ const options = {
   apis: ["./index.ts"], // files containing annotations as above
 };
 
+app.get("/image/:id", (req, res) => {
+  const { id } = req.params;
+  const imageName = `id${id}.jpg`;
+
+  const imagePath = path.join(__dirname, "assets", "posters", imageName);
+  if (fs.existsSync(imagePath)) {
+    const imageStream = fs.createReadStream(imagePath);
+
+    res.setHeader("Content-Type", "image/jpeg");
+
+    imageStream.pipe(res);
+  } else {
+    res.status(404).send("File not found");
+  }
+});
+
 const swaggerSpecification = swaggerJSDoc(options);
 
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpecification));
-
 
 /**
  * @openapi
@@ -98,11 +120,11 @@ app.get("/", (req: Request, res: Response) => {
  *         description: Returns error object.
  */
 app.get("/movies", (req: Request, res: Response) => {
-  let {limit, offset} = req.query;
+  let { limit, offset } = req.query;
   let take = limit ? Number(limit) : undefined;
   let skip = offset ? Number(offset) : undefined;
   prisma.movies
-    .findMany({take: take, skip: skip})
+    .findMany({ take: take, skip: skip })
     .then((movies) => res.status(200).send(movies))
     .catch((error) => res.status(500).send(error));
 });
@@ -187,7 +209,7 @@ app.get("/boxoffice", (req: Request, res: Response) => {
  *                   type: integer
  *       '500':
  *         description: Internal server error.
- * 
+ *
  */
 app.post("/movie", (req: Request, res: Response) => {
   const movie = req.body;
@@ -201,7 +223,7 @@ app.post("/movie", (req: Request, res: Response) => {
 
 app.post("/boxoffice", (req: Request, res: Response) => {
   const movieBoxoffice = req.body;
-   prisma.boxoffice
+  prisma.boxoffice
     .create({
       data: movieBoxoffice,
     })
